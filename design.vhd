@@ -31,6 +31,7 @@ architecture rtl of cpu16 is
   type regfile_t is array (0 to 7) of unsigned(15 downto 0);
   signal R  : regfile_t := (others => (others => '0'));
   signal PC : unsigned(15 downto 0) := (others => '0');
+  signal dmem_addr_comb : unsigned(15 downto 0); -- NOTE: added to fix LD timing issue
 
   -- =========================
   -- 1) INSTRUCTION DECODE SIGNALS
@@ -78,6 +79,11 @@ begin
   c_u    <= unsigned(instr(5 downto 3));
   imm3   <= instr(2 downto 0);
 
+  dmem_addr_comb <= unsigned(signed(R(idx(b_u))) + sext3(imm3)); -- NOTE: added to fix LD timing issue
+  dmem_addr      <= dmem_addr_comb; -- NOTE: added to fix LD timing issue
+  dmem_wdata     <= R(idx(c_u)); -- NOTE: added to fix ST issue that arose from fixing LD issue
+  dmem_we        <= '1' when opcode = "0110" else '0'; -- NOTE: added to fix ST issue that arose from fixing LD issue
+
   -- =========================
   -- 5) SINGLE-CYCLE EXECUTE (sequential state updates)
   -- =========================
@@ -94,9 +100,9 @@ begin
       if rst = '1' then
         PC <= (others => '0');
         R  <= (others => (others => '0'));
-        dmem_we <= '0';
-        dmem_addr <= (others => '0');
-        dmem_wdata <= (others => '0');
+        -- dmem_we <= '0'; -- NOTE: removed to fix ST issue that arose from fixing LD issue
+        -- dmem_addr <= (others => '0'); -- NOTE: removed to fix LD timing issue
+        -- dmem_wdata <= (others => '0'); -- NOTE: removed to fix ST issue that arose from fixing LD issue
       else
         -- -------------------------
         -- Defaults (IMPORTANT)
@@ -110,14 +116,14 @@ begin
         reg_we  := false;
         wdata   := (others => '0');
 
-        dmem_we <= '0';
+        -- dmem_we <= '0'; -- NOTE: removed to fix the ST issue that arose from fixing the LD issue
 
         -- Address for LD/ST: word addressed
         addr := unsigned(signed(R(rb)) + off);
 
         -- Drive memory interface (safe defaults)
-        dmem_addr  <= addr;
-        dmem_wdata <= R(rc);
+        -- dmem_addr  <= addr; -- NOTE: removed to fix LD timing issue
+        -- dmem_wdata <= R(rc); -- NOTE: removed to fix ST issue that arose from fixing LD issue
 
         -- -------------------------
         -- TODO (students): Implement ISA behavior here
@@ -149,7 +155,7 @@ begin
             wdata  := dmem_rdata;
 
           when "0110" =>  -- ST Rc,[Rb+imm3]
-            dmem_we <= '1';
+                          -- dmem_we <= '1'; -- NOTE: removed to fix the ST issue that arose from fixing LD issue
 
           when "0111" =>  -- BEQ Rb,Rc,imm3
             if R(rb) = R(rc) then
