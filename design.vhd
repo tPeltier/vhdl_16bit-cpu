@@ -18,7 +18,9 @@ entity cpu16 is
     dmem_rdata : in  unsigned(15 downto 0);
 
     -- Debug (optional for students)
-    pc_o : out unsigned(15 downto 0)
+    pc_o : out unsigned(15 downto 0);
+    dbg_reg_sel  : in  unsigned(2 downto 0);
+    dbg_reg_data : out unsigned(15 downto 0)
   );
 end entity;
 
@@ -57,6 +59,7 @@ architecture rtl of cpu16 is
 begin
   -- Debug PC
   pc_o <= PC;
+  dbg_reg_data <= R(to_integer(dbg_reg_sel));
 
   -- =========================
   -- 3) FETCH (combinational)
