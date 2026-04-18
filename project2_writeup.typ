@@ -39,11 +39,11 @@
 = CPU Summary
 
 Our CPU module structure creates a single-cycle, 16-bit CPU which consists of a data memory interface, instruction memory interface, and also a debug interface.
-The inputs for the structure are clk, rst, and imem_data, dmem_rdata, dbg_reg_sel.
-Meanwhile, the output is imem_addr, dmem_addr, dmem_we, dmem_wdata, pc_o, and dbg_reg_data.
-The CPU state contains eight 16-bit registers (R0-R7) and a  program counter (PC).
-The 16-bit instructions is split into a 4-bit opcode, three 3-bit register fields (a, b, and c) , and a 3-bit immediate field.
-We also utilize combinational logic which combines memory or address (R[b] + imm3). The CPU supports instructions including addition (add), subtraction (sub), add immediate (addi), and, or, load (ld), store (st), and be equal operations.
+The inputs for the structure are `clk`, `rst`, and `imem_data`, `dmem_rdata`, and `dbg_reg_sel`.
+Meanwhile, the output is `imem_addr`, `dmem_addr`, `dmem_we`, `dmem_wdata`, `pc_o`, and `dbg_reg_data`.
+The CPU state contains eight 16-bit registers (`R0`-`R7`) and a  program counter (`PC`).
+The 16-bit instructions is split into a 4-bit opcode, three 3-bit register fields (`a`, `b`, and `c`) , and a 3-bit immediate field.
+We also utilize combinational logic which combines memory or address (`R[b] + imm3`). The CPU supports instructions including addition (`add`), subtraction (`sub`), add immediate (`addi`), `and`, `or`, load (`ld`), store (`st`), and be equal (`BEQ`) operations.
 
 = Test Program
 
