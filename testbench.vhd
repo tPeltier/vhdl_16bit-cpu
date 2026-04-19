@@ -25,8 +25,14 @@ architecture sim of tb is
   signal dmem_rdata : unsigned(15 downto 0);
 
   signal pc : unsigned(15 downto 0);
-  signal dbg_reg_sel  : unsigned(2 downto 0) := (others => '0');
-  signal dbg_reg_data : unsigned(15 downto 0);
+  signal dbg_r0 : unsigned(15 downto 0);
+  signal dbg_r1 : unsigned(15 downto 0);
+  signal dbg_r2 : unsigned(15 downto 0);
+  signal dbg_r3 : unsigned(15 downto 0);
+  signal dbg_r4 : unsigned(15 downto 0);
+  signal dbg_r5 : unsigned(15 downto 0);
+  signal dbg_r6 : unsigned(15 downto 0);
+  signal dbg_r7 : unsigned(15 downto 0);
 
   -- =========================
   -- 2) SIMPLE ROM / RAM MODELS
@@ -51,8 +57,14 @@ architecture sim of tb is
       dmem_wdata: out unsigned(15 downto 0);
       dmem_rdata: in  unsigned(15 downto 0);
       pc_o      : out unsigned(15 downto 0);
-      dbg_reg_sel  : in  unsigned(2 downto 0);
-      dbg_reg_data : out unsigned(15 downto 0)
+      dbg_r0 : out unsigned(15 downto 0);
+      dbg_r1 : out unsigned(15 downto 0);
+      dbg_r2 : out unsigned(15 downto 0);
+      dbg_r3 : out unsigned(15 downto 0);
+      dbg_r4 : out unsigned(15 downto 0);
+      dbg_r5 : out unsigned(15 downto 0);
+      dbg_r6 : out unsigned(15 downto 0);
+      dbg_r7 : out unsigned(15 downto 0)
     );
   end component;
 
@@ -85,8 +97,14 @@ begin
       dmem_wdata=> dmem_wdata,
       dmem_rdata=> dmem_rdata,
       pc_o      => pc,
-      dbg_reg_sel  => dbg_reg_sel,
-      dbg_reg_data => dbg_reg_data
+      dbg_r0    => dbg_r0,
+      dbg_r1    => dbg_r1,
+      dbg_r2    => dbg_r2,
+      dbg_r3    => dbg_r3,
+      dbg_r4    => dbg_r4,
+      dbg_r5    => dbg_r5,
+      dbg_r6    => dbg_r6,
+      dbg_r7    => dbg_r7
     );
 
   -- =========================
@@ -135,21 +153,29 @@ begin
     end procedure;
 
     procedure check_reg(reg : integer; expected : integer) is
-      variable got : integer;
+                        variable got : integer;
     begin
-      dbg_reg_sel <= to_unsigned(reg, 3);
-      wait for 1 ns;
-      got := to_integer(dbg_reg_data);
-      if got /= expected then
-        report "FAIL: R" & integer'image(reg) &
-               " expected=" & integer'image(expected) &
-               " got="      & integer'image(got)
-          severity failure;
-      else
-        report "PASS: R" & integer'image(reg) &
-               " = "     & integer'image(got)
-          severity note;
-      end if;
+        case reg is
+            when 0 => got := to_integer(dbg_r0);
+            when 1 => got := to_integer(dbg_r1);
+            when 2 => got := to_integer(dbg_r2);
+            when 3 => got := to_integer(dbg_r3);
+            when 4 => got := to_integer(dbg_r4);
+            when 5 => got := to_integer(dbg_r5);
+            when 6 => got := to_integer(dbg_r6);
+            when 7 => got := to_integer(dbg_r7);
+            when others => got := -1;
+        end case;
+        if got /= expected then
+            report "FAIL: R" & integer'image(reg) &
+            " expected=" & integer'image(expected) &
+            " got="      & integer'image(got)
+            severity failure;
+        else
+            report "PASS: R" & integer'image(reg) &
+                   " = "     & integer'image(got)
+            severity note;
+        end if;
     end procedure;
 
     procedure check_pc(expected : integer) is

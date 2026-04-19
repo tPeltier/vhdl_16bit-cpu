@@ -19,8 +19,14 @@ entity cpu16 is
 
     -- Debug (optional for students)
     pc_o : out unsigned(15 downto 0);
-    dbg_reg_sel  : in  unsigned(2 downto 0);
-    dbg_reg_data : out unsigned(15 downto 0)
+    dbg_r0 : out unsigned(15 downto 0);
+    dbg_r1 : out unsigned(15 downto 0);
+    dbg_r2 : out unsigned(15 downto 0);
+    dbg_r3 : out unsigned(15 downto 0);
+    dbg_r4 : out unsigned(15 downto 0);
+    dbg_r5 : out unsigned(15 downto 0);
+    dbg_r6 : out unsigned(15 downto 0);
+    dbg_r7 : out unsigned(15 downto 0)
   );
 end entity;
 
@@ -58,9 +64,16 @@ architecture rtl of cpu16 is
   end function;
 
 begin
-  -- Debug PC
+  -- Debug
   pc_o <= PC;
-  dbg_reg_data <= R(to_integer(dbg_reg_sel));
+  dbg_r0 <= R(0);
+  dbg_r1 <= R(1);
+  dbg_r2 <= R(2);
+  dbg_r3 <= R(3);
+  dbg_r4 <= R(4);
+  dbg_r5 <= R(5);
+  dbg_r6 <= R(6);
+  dbg_r7 <= R(7);
 
   -- =========================
   -- 3) FETCH (combinational)
