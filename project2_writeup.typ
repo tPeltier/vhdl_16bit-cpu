@@ -44,7 +44,7 @@ CPU state contains eight 16-bit general-purpose registers along with a program c
 register fields (a, b, c), and a 3-bit immediate value that is sign-extended during execution. Combinational logic computes effective addresses such as (`R[b] + imm3`) for memory
 operations. Supported instructions include addition (`add`), subtraction (`sub`), add immediate (`addi`), bitwise AND (`and`), bitwise OR (`or`), load (`ld`), store (`st`), and branch-if-equal (`beq`).
 Originally, the output of dmem was located within the processing clock section of code which created an issue with the load and store instruction not being able to execute within
-one clock cycle. Due to this flaw, the three signals for dmem(addr, wdata, and we) were moved into the decode section so that the program could successfully load the correct 
+one clock cycle. Due to this flaw, the three signals for dmem(addr, wdata, and we) were moved into the decode section so that the program could successfully load the correct
 address that was stored in memory from and to a register.
 
 
@@ -59,6 +59,15 @@ Arithmetic and logical operations are tested through sequences of add, subtract,
 data memory and subsequently loading them back into registers. Branch instructions are also included to confirm proper control flow and conditional execution. Overall, this
 testbench ensures that the CPU correctly performs instruction execution, data movement, and interaction between registers and memory.
 
+= Member Participation
+
+- Justice
+  - Lead Programmer
+  - Assisted with editing & finalizing the writeup
+- Lewis
+  - Lead Writer
+  - Assisted with debugging the VHD code
+  - Assisted with the creation of the test program & checks
 
 = Screenshots
 
