@@ -95,7 +95,7 @@ begin
   dmem_addr_comb <= unsigned(signed(R(idx(b_u))) + sext3(imm3)); -- NOTE: added to fix LD timing issue
   dmem_addr      <= dmem_addr_comb; -- NOTE: added to fix LD timing issue
   dmem_wdata     <= R(idx(c_u)); -- NOTE: added to fix ST issue that arose from fixing LD issue
-  dmem_we        <= '1' when opcode = "0110" else '0'; -- NOTE: added to fix ST issue that arose from fixing LD issue
+  dmem_we        <= '1' when (opcode = "0110" and rst = '0') else '0'; -- NOTE: added to fix ST issue that arose from fixing LD issue
 
   -- =========================
   -- 5) SINGLE-CYCLE EXECUTE (sequential state updates)
