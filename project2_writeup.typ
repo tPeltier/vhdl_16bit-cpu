@@ -57,12 +57,12 @@ testbench ensures that the CPU correctly performs instruction execution, data mo
 
 = Screenshots
 
-// #figure(
-//   image("wave_screenshot.png"),
-//   caption: [Waveform],
-// )
-//
-// #figure(
-//   image("pass_Output.png"),
-//   caption: [Console Output],
-// )
+#figure(
+   image("wave_screenshot.png"),
+   caption: [Waveform],
+)
+
+ #figure(
+   image("pass_Output.png"),
+   caption: [Console Output],
+)
