@@ -199,16 +199,22 @@ begin
     -- -----------------------------------------
     -- === START PROGRAM LOAD ===
     -- NOTE: IMEM(...) <= x"....";
-    IMEM(0) <= x"4203"; -- ADDI  R1, R0, 3
-    IMEM(1) <= x"4407"; -- ADDI  R2, R0, -1
-    IMEM(2) <= x"0650"; -- ADD   R3, R1, R2
-    IMEM(3) <= x"1850"; -- SUB   R4, R1, R2
-    IMEM(4) <= x"2a58"; -- AND   R5, R1, R3
-    IMEM(5) <= x"3c50"; -- OR    R6, R1, R2
-    IMEM(6) <= x"601a"; -- ST    R3, [R0 + 2]
-    IMEM(7) <= x"5e02"; -- LD    R7, [R0 + 2]
-    IMEM(8) <= x"70fd"; -- BEQ   R3, R7, -3
-    IMEM(9) <= x"4000"; -- ADDI  R0, R0, 0
+    IMEM(0) <= x"4203"; -- ADDI  R1, R0, 3       ; R1 = i = 3
+    IMEM(1) <= x"4407"; -- ADDI  R2, R0, -1      ; R2 = -1
+    IMEM(2) <= x"3a50"; -- OR    R5, R1, R2      ; R5 = 3 OR -1 = -1
+    IMEM(3) <= x"6049"; -- ST    R1, [R1 + 1]    ; mem[4] = 3
+    IMEM(4) <= x"5841"; -- LD    R4, [R1 + 1]    ; R4 = 3
+    IMEM(5) <= x"06c8"; -- ADD   R3, R3, R1      ; sum += i | loop top
+    IMEM(6) <= x"4247"; -- ADDI  R1, R1, -1      ; i--
+    IMEM(7) <= x"7041"; -- BEQ   R1, R0, 1       ; if i==0 jump to PC9
+    IMEM(8) <= x"704c"; -- BEQ   R1, R1, -4      ; "unconditional" jump to PC5
+    IMEM(9) <= x"611a"; -- ST    R3, [R4 + 2]    ; mem[5] = 6
+    IMEM(10) <= x"1d10"; -- SUB   R6, R4, R2      ; R6 = 3-(-1) = 4
+    IMEM(11) <= x"6031"; -- ST    R6, [R0 + 1]    ; mem[1] = 4
+    IMEM(12) <= x"2ce0"; -- AND   R6, R3, R4      ; R6 = 6 AND 3 = 2
+    IMEM(13) <= x"6032"; -- ST    R6, [R0 + 2]    ; mem[2] = 2
+    IMEM(14) <= x"4cc7"; -- ADDI  R6, R3, -1      ; R6 = 5
+    IMEM(15) <= x"6033"; -- ST    R6, [R0 + 3]    ; mem[3] = 5
     -- === END PROGRAM LOAD ===
 
     -- -----------------------------------------
@@ -227,19 +233,20 @@ begin
     -- -----------------------------------------
     -- (D) Checks (self-checking requirement)
     -- -----------------------------------------
-    -- TODO (students): Add checks for correctness.
-    -- At minimum: check one DMEM location and/or expected outputs.
-    --
-    -- Example:
+    check_dmem(1, 4);
     check_dmem(2, 2);
+    check_dmem(3, 5);
+    check_dmem(4, 3);
+    check_dmem(5, 6);
     check_reg(0, 0);
-    check_reg(1, 3);
+    check_reg(1, 0);
     check_reg(2, 65535); -- -1
-    check_reg(3, 2);
-    check_reg(4, 4);
-    check_reg(5, 2);
-    check_reg(6, 65535); -- -1
-    check_reg(7, 2);
+    check_reg(3, 6);
+    check_reg(4, 3);
+    check_reg(5, 65535); -- -1
+    check_reg(6, 5);
+    check_reg(7, 0);
+    check_pc(18);
 
     -- TODO: Print final PASS only if all checks passed.
     report "FINAL: PASS" severity note;
