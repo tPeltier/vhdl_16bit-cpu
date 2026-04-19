@@ -17,7 +17,7 @@ entity cpu16 is
     dmem_wdata : out unsigned(15 downto 0);
     dmem_rdata : in  unsigned(15 downto 0);
 
-    -- Debug (optional for students)
+    -- Debug
     pc_o : out unsigned(15 downto 0);
     dbg_r0 : out unsigned(15 downto 0);
     dbg_r1 : out unsigned(15 downto 0);
@@ -48,7 +48,7 @@ architecture rtl of cpu16 is
   signal imm3   : std_logic_vector(2 downto 0);
 
   -- =========================
-  -- 2) HELPERS (you should keep)
+  -- 2) HELPERS
   -- =========================
   function sext3(x : std_logic_vector(2 downto 0)) return signed is
     variable s : signed(15 downto 0);
@@ -139,8 +139,7 @@ begin
         -- dmem_wdata <= R(rc); -- NOTE: removed to fix ST issue that arose from fixing LD issue
 
         -- -------------------------
-        -- TODO (students): Implement ISA behavior here
-        -- Use the opcode table from the manual.
+        -- ISA behavior
         -- -------------------------
         case opcode is
           when "0000" =>  -- ADD  Ra,Rb,Rc

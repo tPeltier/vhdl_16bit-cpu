@@ -134,7 +134,7 @@ begin
   -- =========================
   process
     -- -----------------------------------------
-    -- Helper check procedures (students can add more)
+    -- Helper check procedures
     -- -----------------------------------------
     procedure check_dmem(addr : integer; expected : integer) is
       variable got : integer;
@@ -191,14 +191,11 @@ begin
       end if;
     end procedure;
 
-    -- TODO (optional): add check_pc, check_signal, etc.
-    -- procedure check_pc(expected : integer) is ...
   begin
     -- -----------------------------------------
     -- (A) Load a program into IMEM
     -- -----------------------------------------
     -- === START PROGRAM LOAD ===
-    -- NOTE: IMEM(...) <= x"....";
     IMEM(0) <= x"4203"; -- ADDI  R1, R0, 3       ; R1 = i = 3
     IMEM(1) <= x"4407"; -- ADDI  R2, R0, -1      ; R2 = -1
     IMEM(2) <= x"3a50"; -- OR    R5, R1, R2      ; R5 = 3 OR -1 = -1
@@ -227,7 +224,6 @@ begin
     -- -----------------------------------------
     -- (C) Run simulation long enough
     -- -----------------------------------------
-    -- TODO (students): adjust runtime if your program is longer.
     wait for 250 ns;
 
     -- -----------------------------------------
