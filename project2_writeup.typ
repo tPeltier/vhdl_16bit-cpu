@@ -36,22 +36,24 @@
 
 = Link to EDA Project
 
-= CPU Summary
-
-Our CPU module structure creates a single-cycle, 16-bit CPU which consists of a data memory interface, instruction memory interface, and also a debug interface.
-The inputs for the structure are `clk`, `rst`, and `imem_data`, `dmem_rdata`, and `dbg_reg_sel`.
-Meanwhile, the output is `imem_addr`, `dmem_addr`, `dmem_we`, `dmem_wdata`, `pc_o`, and `dbg_reg_data`.
-The CPU state contains eight 16-bit registers (`R0`-`R7`) and a  program counter (`PC`).
-The 16-bit instructions is split into a 4-bit opcode, three 3-bit register fields (`a`, `b`, and `c`) , and a 3-bit immediate field.
-We also utilize combinational logic which combines memory or address (`R[b] + imm3`). The CPU supports instructions including addition (`add`), subtraction (`sub`), add immediate (`addi`), `and`, `or`, load (`ld`), store (`st`), and be equal (`BEQ`) operations.
+= Module Structure
+Our module implements a single-cycle, 16-bit CPU composed of an instruction memory interface, a data memory interface, and a debug interface that exposes all internal registers. 
+Inputs include clk, rst, imem_data, and dmem_rdata, while outputs consist of imem_addr, dmem_addr, dmem_we, dmem_wdata, pc_o, and debug signals for registers R0–R7. 
+CPU state contains eight 16-bit general-purpose registers along with a program counter (PC). Each instruction is 16 bits wide and partitioned into a 4-bit opcode, three 3-bit 
+register fields (a, b, c), and a 3-bit immediate value that is sign-extended during execution. Combinational logic computes effective addresses such as (R[b] + imm3) for memory 
+operations. Supported instructions include addition (add), subtraction (sub), add immediate (addi), bitwise AND (and), bitwise OR (or), load (ld), store (st), and branch-if-equal (beq).
 
 = Test Program
+The testbench generates a clock signal and applies a reset to initialize the CPU before loading a predefined program into instruction memory. 
+After initialization, the CPU is allowed to run for approximately 250 nanoseconds, providing sufficient time for all instructions in the program to execute. 
+Once execution is completed, the testbench evaluates specific register values and memory locations to verify correct behavior. Assertions are used to compare expected 
+results with actual outputs; any mismatch produces an error message indicating failure, while correct values generate confirmation messages.
 
-The test program generates a clock, resets, loads a program into instruction memory, runs, and then checks select registers and memory values at the end.
-The CPU waits for 250 nanoseconds, giving the program time to execute and then run the assertions.
-If a value expected in memory or the register is not correct, then a string containing the failure will be printed.
-If a value is correct, then a pass will be generated.
-The current program utilizes the 8 opcodes and registers, proving the current design can perform basic arithmetic, loading and storing in memory, and that data correctly flows between registers and memory.
+Program execution exercises all supported opcodes and utilizes multiple registers to validate functionality across the Datapath. 
+Arithmetic and logical operations are tested through sequences of add, subtract, AND, and OR instructions. Memory operations are verified by storing computed values into 
+data memory and subsequently loading them back into registers. A branch instruction is also included to confirm proper control flow and conditional execution. Overall, this 
+testbench ensures that the CPU correctly performs instruction execution, data movement, and interaction between registers and memory.
+
 
 = Screenshots
 
