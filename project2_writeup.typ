@@ -35,6 +35,7 @@
 ])
 
 = Link to EDA Project
+https://www.edaplayground.com/x/bxrv
 
 = Module Structure
 Our module implements a single-cycle, 16-bit CPU composed of an instruction memory interface, a data memory interface, and a debug interface that exposes all internal registers. 
