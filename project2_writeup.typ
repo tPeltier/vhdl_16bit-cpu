@@ -43,6 +43,10 @@ Inputs include `clk`, `rst`, `imem_data`, and `dmem_rdata`, while outputs consis
 CPU state contains eight 16-bit general-purpose registers along with a program counter (PC). Each instruction is 16 bits wide and partitioned into a 4-bit opcode, three 3-bit
 register fields (a, b, c), and a 3-bit immediate value that is sign-extended during execution. Combinational logic computes effective addresses such as (`R[b] + imm3`) for memory
 operations. Supported instructions include addition (`add`), subtraction (`sub`), add immediate (`addi`), bitwise AND (`and`), bitwise OR (`or`), load (`ld`), store (`st`), and branch-if-equal (`beq`).
+Originally, the output of dmem was located within the processing clock section of code which created an issue with the load and store instruction not being able to execute within
+one clock cycle. Due to this flaw, the three signals for dmem(addr, wdata, and we) were moved into the decode section so that the program could successfully load the correct 
+address that was stored in memory from and to a register.
+
 
 = Test Program
 The testbench generates a clock signal and applies a reset to initialize the CPU before loading a predefined program into instruction memory.
